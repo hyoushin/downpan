@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="zh">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>似水涟漪之年</title>
+
+		<meta name="description" content="葛瑞的个人小站">
+		<meta name="author" content="似水涟漪之年">
+
+		<meta name="viewport" content="width=800, user-scalable=no">
+
+		<link rel="stylesheet" href="./css/demo.css">
+	</head>
+
+	<body>
+
+		<div class="meny" id='list'>
+			</ul>
+		
+		</div>
+
+		<div class="meny-arrow"></div>
+
+		<div class="contents">
+
+				<iframe id="viewer" src="http://baidu.com" style="position: absolute;height: 99%;width: 99%;border: 0px;z-index: 100;"></iframe>
+			<!--</article>-->
+
+		</div>
+
+		<script src="js/meny.js"></script>
+		<script>
+		function arr(arr1,arr2){
+		return(new Array(arr1,arr2));
+		}
+		var f={
+			'游戏':[
+				arr("2048游戏","http://gerui0307.github.io/page/2048/"),
+				arr("flappy2048","http://gerui0307.github.io/page/flappy2048/"),
+				arr("九球连接","http://gerui0307.github.io/page/9Balljs/")
+			],
+			
+			'工具':[
+				arr("百度网盘","http://gerui0307.github.io/pan/"),
+				arr("markdown编辑器","http://gerui0307.github.io/page/markdown/"),
+				arr("WEBSQL调试","http://gerui0307.github.io/web-SQL-admin/"),
+				arr("迅雷地址转换","http://gerui0307.github.io/page/xunleiURL/index.htm")
+			],
+			'链接':[
+				arr("百度","http://baidu.com/"),
+				arr("好123","http://hao123.com/"),
+				arr("豆瓣FM","http://douban.fm/")
+			
+			]
+		
+		};
+		//
+		function find(fa){
+			fi='http://baidu.com'
+			for(var key in f){
+				console.log( key );
+				var section = f[ key ];
+				for(var i = 0; i<section.length; i ++ ){
+					( function ( file ) {
+						console.log( file[0] );
+						console.log( file[1] );
+						if(fa+''==file[0]+''){
+							fi = file[1];
+							
+						}
+					} )( section[ i ] );
+				}
+			
+			}
+			return fi;
+		}
+		
+		//
+		var list = document.getElementById( 'list' );
+		var viewer = document.getElementById( 'viewer' );
+		var container = document.createElement( 'ul' );
+		list.appendChild( container );
+		var divs = {};
+		var selected = null;
+		for ( var key in f ) {
+			var section = f[ key ];
+			var div = document.createElement( 'h2' );
+			div.textContent = key;
+			container.appendChild( div );
+			for ( var i = 0; i < section.length; i ++ ) {
+				( function ( file ) {
+					var name = file[0];
+					var li = document.createElement( 'li' );
+					var span = document.createElement( 'span' );
+					span.className="rspan";
+					
+					var div = document.createElement( 'a' );
+					div.className = 'link';
+					div.textContent = name;
+					div.href = "javascript:void(0)";
+					div.addEventListener( 'click', function () {
+						load( file );
+					} );
+					li.appendChild(div);
+					li.appendChild(span);
+					
+					container.appendChild( li );
+					divs[ file[0] ] = li;
+				} )( section[ i ] );
+			}
+			
+			
+		}
+		
+		var load = function ( file ) {
+			//if ( selected != null ) divs[ selected ].className = 'link';
+			//divs[ file[0] ].className = 'link selected';
+			window.location.hash = file[0];
+			viewer.src = file[1];
+			viewer.focus();
+			selected = file[0];
+		};
+		if ( window.location.hash !== '' ) {
+			load(new Array(name = window.location.hash.substring( 1 ) , find( name ) ) );
+		}
+
+		</script>
+		<script>
+			// Create an instance of Meny
+			var meny = Meny.create({
+				// The element that will be animated in from off screen
+				menuElement: document.querySelector( '.meny' ),
+
+				// The contents that gets pushed aside while Meny is active
+				contentsElement: document.querySelector( '.contents' ),
+
+				// [optional] The alignment of the menu (top/right/bottom/left)
+				position: Meny.getQuery().p || 'left',
+
+				// [optional] The height of the menu (when using top/bottom position)
+				height: 200,
+
+				// [optional] The width of the menu (when using left/right position)
+				width: 260,
+
+				// [optional] Distance from mouse (in pixels) when menu should open
+				threshold: 40,
+
+				// [optional] Use mouse movement to automatically open/close
+				mouse: true,
+
+				// [optional] Use touch swipe events to open/close
+				touch: true
+			});
+
+			// API Methods:
+			// meny.open();
+			// meny.close();
+			// meny.isOpen();
+
+			// Events:
+			// meny.addEventListener( 'open', function(){ console.log( 'open' ); } );
+			// meny.addEventListener( 'close', function(){ console.log( 'close' ); } );
+
+			// Embed an iframe if a URL is passed in
+			if( Meny.getQuery().u && Meny.getQuery().u.match( /^http/gi ) ) {
+				var contents = document.querySelector( '.contents' );
+				contents.style.padding = '0px';
+				contents.innerHTML = '<div class="cover"></div><iframe src="'+ Meny.getQuery().u +'" style="width: 100%; height: 100%; border: 0; position: absolute;"></iframe>';
+			}
+			/**
+			document.onmouseout=function(){c=setTimeout('meny.close()',1000);}
+			document.onmouseover=function(){clearTimeout(c);}**/
+		</script>
+
+	</body>
+</html>
